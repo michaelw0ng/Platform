@@ -1,0 +1,30 @@
+#page {
+  display: flex;
+  background-color: #d1d5db;
+}
+
+input {
+  margin: 5px 5px 5px 5px;
+}
+
+form {
+  flex: 1;
+  padding: 20px;
+  text-align: center;
+}
+
+table {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td,
+tr {
+  border: 1px solid black;
+}
+
+h1 {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
