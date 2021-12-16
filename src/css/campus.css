@@ -28,3 +28,11 @@ h1 {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
+
+p {
+  color: red;
+}
+
+p:hover {
+  cursor: pointer;
+}
