@@ -16,6 +16,13 @@ export default function Campus() {
     const button = document.getElementById("submit");
     button.addEventListener("click", (event) => {
       event.preventDefault();
+      const inputs = document.getElementsByTagName("input");
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === "") {
+          alert("Please complete form data");
+          return;
+        }
+      }
       addCampus();
       const tbody = document.getElementById("tbody");
       while (tbody.firstChild) {
