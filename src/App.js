@@ -8,6 +8,8 @@ import {
 import Homepage from "./Pages/Homepage";
 import Campus from "./Pages/Campus";
 import Student from "./Pages/Student";
+import SpecificStudent from "./Pages/SpecificStudent";
+import SpecificCampus from "./Pages/SpecificCampus";
 
 function App() {
   return (
@@ -20,6 +22,12 @@ function App() {
       </Switch>
       <Switch>
         <Route exact path="/student" element={<Student />} />
+      </Switch>
+      <Switch>
+        <Route exact path="/student/:student" element={<SpecificStudent />} />
+      </Switch>
+      <Switch>
+        <Route exact path="/campus/:campus" element={<SpecificCampus />} />
       </Switch>
     </Router>
   );
