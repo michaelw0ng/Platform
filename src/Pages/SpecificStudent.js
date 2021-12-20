@@ -1,10 +1,44 @@
 import React, { useEffect } from "react";
 import Navbar from "../Navbar.js";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function SpecificStudent() {
+  const history = useNavigate();
   const { student } = useParams();
-  useEffect(() => {
+  const populateTable = (obj) => {
+    const tbody = document.getElementById("tbody");
+    while (tbody.firstChild) {
+      tbody.removeChild(tbody.firstChild);
+    }
+    if (obj.length === 0) {
+      const text = document.createElement("div");
+      text.innerHTML =
+        "No campuses currently exist in the database. Please add campus to see campuses.";
+      tbody.appendChild(text);
+    }
+    for (let i = 0; i < Object.keys(obj).length; i++) {
+      const tr = document.createElement("tr");
+      const td1 = document.createElement("td");
+      td1.innerHTML = obj[i].name;
+      td1.addEventListener("click", () => {
+        history(`/campus/${obj[i].id}`);
+      });
+      td1.addEventListener("mouseover", () => {
+        td1.style.cursor = "pointer";
+      });
+      td1.addEventListener("mouseout", () => {
+        td1.style.cursor = "auto";
+      });
+      const td2 = document.createElement("td");
+      const img = document.createElement("img");
+      img.src = obj[i].imgUrl;
+      td2.appendChild(img);
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      tbody.appendChild(tr);
+    }
+  };
+  const populateForm = () => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/getstudent");
     xhr.send(student);
@@ -25,7 +59,36 @@ export default function SpecificStudent() {
       email.value = data.email;
       college.value = data.college;
       address.value = data.collegeAddress;
+      const text = document.getElementById("enrollment");
+      if (
+        data.college === null ||
+        data.collegeAddress === null ||
+        data.college === "" ||
+        data.collegeAddress === "" ||
+        data.college === undefined ||
+        data.collegeAddress === undefined ||
+        data.CampusId === null ||
+        data.CampusId === "" ||
+        data.CampusId === undefined
+      ) {
+        text.innerHTML = "Student is not enrolled at any campus";
+        const p = document.createElement("p");
+        text.appendChild(p);
+      } else {
+        text.innerHTML = "";
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://localhost:8080/getcampus");
+        xhttp.send(data.CampusId);
+        xhttp.addEventListener("load", () => {
+          const tableData = JSON.parse(xhttp.responseText);
+          console.log(tableData);
+          populateTable(tableData);
+        });
+      }
     });
+  };
+  useEffect(() => {
+    populateForm();
   }, []);
   const edit = () => {
     let data = {};
@@ -44,22 +107,43 @@ export default function SpecificStudent() {
     data.email = email?.value;
     data.college = college?.value;
     data.collegeAddress = address?.value;
-    if (college.value != "" && address.value === "") {
-      alert("Please enter college address");
+    if (
+      (college.value != "" && address.value === "") ||
+      (college.value === "" && address.value != "")
+    ) {
+      alert(
+        "If editing college information, please enter college name and address"
+      );
       return;
     }
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/editstudent");
     xhr.send(JSON.stringify(data));
     xhr.addEventListener("load", () => {
+      populateForm();
       alert(xhr.responseText);
+    });
+  };
+
+  const deleteStudent = () => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/removestudentbyid");
+    xhr.send(student);
+    xhr.addEventListener("load", () => {
+      const form = document.getElementById("form");
+      while (form.firstChild) {
+        form.removeChild(form.firstChild);
+      }
+      const text = document.createElement("div");
+      text.innerHTML = "Student deleted";
+      form.appendChild(text);
     });
   };
 
   return (
     <div id="page">
       <Navbar />
-      <form>
+      <form id="form">
         <h1>Edit Student</h1>
         First Name:
         <input id="firstName"></input>
@@ -98,6 +182,19 @@ export default function SpecificStudent() {
         >
           Edit
         </button>
+        <button
+          onClick={(event) => {
+            event.preventDefault();
+            deleteStudent();
+          }}
+        >
+          Delete Student
+        </button>
+        <h1>Enrollment</h1>
+        <div id="enrollment"></div>
+        <table>
+          <tbody id="tbody"></tbody>
+        </table>
       </form>
     </div>
   );

@@ -32,6 +32,7 @@ h1 {
 
 p {
   color: red;
+  font-weight: bold;
 }
 
 p:hover {
@@ -45,4 +46,12 @@ img {
 
 button {
   margin: 5px 5px 5px 5px;
+}
+
+b {
+  color: green;
+}
+
+b:hover {
+  cursor: pointer;
 }
