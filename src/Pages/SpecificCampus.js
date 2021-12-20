@@ -4,6 +4,73 @@ import { useParams, useNavigate } from "react-router-dom";
 
 export default function SpecificCampus() {
   const history = useNavigate();
+  const populateSecondTable = (obj) => {
+    const tbody = document.getElementById("tbody2");
+    while (tbody.firstChild) {
+      tbody.removeChild(tbody.firstChild);
+    }
+    if (obj.length === 0) {
+      const text = document.createElement("div");
+      text.innerHTML = "No students currently unaffiliated with this campus";
+      tbody.appendChild(text);
+    }
+    for (let i = 0; i < Object.keys(obj).length; i++) {
+      const tr = document.createElement("tr");
+      const td1 = document.createElement("td");
+      td1.innerHTML = obj[i].firstName;
+      const td2 = document.createElement("td");
+      td2.innerHTML = obj[i].lastName;
+      td1.addEventListener("click", () => {
+        history(`/student/${obj[i].id}`);
+      });
+      td1.addEventListener("mouseover", () => {
+        td1.style.cursor = "pointer";
+      });
+      td1.addEventListener("mouseout", () => {
+        td1.style.cursor = "auto";
+      });
+      td2.addEventListener("click", () => {
+        history(`/student/${obj[i].id}`);
+      });
+      td2.addEventListener("mouseover", () => {
+        td2.style.cursor = "pointer";
+      });
+      td2.addEventListener("mouseout", () => {
+        td2.style.cursor = "auto";
+      });
+      const x = document.createElement("b");
+      x.innerHTML = "+";
+      x.addEventListener("click", () => {
+        obj[i].CampusId = campus;
+        const data = JSON.stringify(obj[i]);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8080/enrollStudent");
+        xhr.send(data);
+        xhr.addEventListener("load", () => {
+          const xhttp = new XMLHttpRequest();
+          xhttp.open("POST", "http://localhost:8080/unaffiliatedstudents");
+          xhttp.send(campus);
+          xhttp.addEventListener("load", () => {
+            const tableData = JSON.parse(xhttp.responseText);
+            console.log(tableData);
+            populateSecondTable(tableData);
+            const xmlhr = new XMLHttpRequest();
+            xmlhr.open("POST", "http://localhost:8080/enrolledstudents");
+            xmlhr.send(campus);
+            xmlhr.addEventListener("load", () => {
+              const tableData = JSON.parse(xmlhr.responseText);
+              console.log(tableData);
+              populateTable(tableData);
+            });
+          });
+        });
+      });
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      tr.appendChild(x);
+      tbody.appendChild(tr);
+    }
+  };
   const populateTable = (obj) => {
     const tbody = document.getElementById("tbody");
     while (tbody.firstChild) {
@@ -43,7 +110,7 @@ export default function SpecificCampus() {
       x.addEventListener("click", () => {
         const data = JSON.stringify(obj[i]);
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/removeStudent");
+        xhr.open("POST", "http://localhost:8080/unenrollStudent");
         xhr.send(data);
         xhr.addEventListener("load", () => {
           const xhttp = new XMLHttpRequest();
@@ -53,6 +120,14 @@ export default function SpecificCampus() {
             const tableData = JSON.parse(xhttp.responseText);
             console.log(tableData);
             populateTable(tableData);
+          });
+          const http = new XMLHttpRequest();
+          http.open("POST", "http://localhost:8080/unaffiliatedstudents");
+          http.send(campus);
+          http.addEventListener("load", () => {
+            const tableData = JSON.parse(http.responseText);
+            console.log(tableData);
+            populateSecondTable(tableData);
           });
         });
       });
@@ -107,6 +182,15 @@ export default function SpecificCampus() {
       console.log(tableData);
       populateTable(tableData);
     });
+
+    const http = new XMLHttpRequest();
+    http.open("POST", "http://localhost:8080/unaffiliatedstudents");
+    http.send(campus);
+    http.addEventListener("load", () => {
+      const tableData = JSON.parse(http.responseText);
+      console.log(tableData);
+      populateSecondTable(tableData);
+    });
   }, []);
   const edit = () => {
     let data = {};
@@ -133,6 +217,10 @@ export default function SpecificCampus() {
         <h1>Enrolled Students</h1>
         <table>
           <tbody id="tbody"></tbody>
+        </table>
+        <h1>Unaffiliated Students</h1>
+        <table>
+          <tbody id="tbody2"></tbody>
         </table>
         <h1>Edit College</h1>
         Name:
