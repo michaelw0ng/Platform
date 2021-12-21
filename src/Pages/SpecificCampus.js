@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Navbar from "../Navbar.js";
 import { useParams, useNavigate } from "react-router-dom";
 
-export default function SpecificCampus() {
+export default function SpecificCampus(props) {
   const history = useNavigate();
   const populateSecondTable = (obj) => {
     const tbody = document.getElementById("tbody2");
@@ -61,6 +61,7 @@ export default function SpecificCampus() {
               const tableData = JSON.parse(xmlhr.responseText);
               console.log(tableData);
               populateTable(tableData);
+              props.redux.fetchStudents();
             });
           });
         });
@@ -128,6 +129,7 @@ export default function SpecificCampus() {
             const tableData = JSON.parse(http.responseText);
             console.log(tableData);
             populateSecondTable(tableData);
+            props.redux.fetchStudents();
           });
         });
       });
@@ -154,9 +156,11 @@ export default function SpecificCampus() {
       const text = document.createElement("div");
       text.innerHTML = "Campus deleted";
       form.appendChild(text);
+      props.redux.fetchCampuses();
     });
   };
   useEffect(() => {
+    console.log(props);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/getcampus");
     xhr.send(campus);
@@ -208,6 +212,7 @@ export default function SpecificCampus() {
     xhr.send(JSON.stringify(data));
     xhr.addEventListener("load", () => {
       alert(xhr.responseText);
+      props.redux.fetchCampuses();
     });
   };
   return (
