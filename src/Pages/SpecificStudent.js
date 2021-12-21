@@ -21,7 +21,7 @@ export default function SpecificStudent(props) {
       const td1 = document.createElement("td");
       td1.innerHTML = obj[i].name;
       td1.addEventListener("click", () => {
-        history(`/campus/${obj[i].id}`);
+        history(`/campuses/${obj[i].id}`);
       });
       td1.addEventListener("mouseover", () => {
         td1.style.cursor = "pointer";
