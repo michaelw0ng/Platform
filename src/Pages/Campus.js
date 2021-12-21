@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/campus.css";
 
-export default function Campus() {
+export default function Campus(props) {
   const history = useNavigate();
   const addCampus = () => {
     const inputs = document.getElementsByTagName("input");
@@ -28,6 +28,7 @@ export default function Campus() {
         console.log(tableData);
         populateTable(tableData);
       });
+      props.redux.fetchCampuses();
     });
   };
 
@@ -75,6 +76,7 @@ export default function Campus() {
             console.log(tableData);
             populateTable(tableData);
           });
+          props.redux.fetchCampuses();
         });
       });
       tr.appendChild(td1);

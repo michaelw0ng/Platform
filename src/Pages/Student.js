@@ -3,7 +3,7 @@ import Navbar from "../Navbar";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Student() {
+export default function Student(props) {
   const history = useNavigate();
   const addStudent = () => {
     const inputs = document.getElementsByTagName("input");
@@ -27,6 +27,8 @@ export default function Student() {
         console.log(tableData);
         populateTable(tableData);
       });
+      props.redux.fetchStudents();
+      props.redux.fetchCampuses();
     });
   };
 
@@ -81,6 +83,7 @@ export default function Student() {
             console.log(tableData);
             populateTable(tableData);
           });
+          props.redux.fetchStudents();
         });
       });
       tr.appendChild(td1);
@@ -90,6 +93,7 @@ export default function Student() {
     }
   };
   useEffect(() => {
+    console.log(props);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:8080/students");
     xhr.send();

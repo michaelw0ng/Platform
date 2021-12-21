@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Navbar from "../Navbar.js";
 import { useParams, useNavigate } from "react-router-dom";
 
-export default function SpecificStudent() {
+export default function SpecificStudent(props) {
   const history = useNavigate();
   const { student } = useParams();
   const populateTable = (obj) => {
@@ -88,6 +88,7 @@ export default function SpecificStudent() {
     });
   };
   useEffect(() => {
+    console.log(props);
     populateForm();
   }, []);
   const edit = () => {
@@ -122,6 +123,8 @@ export default function SpecificStudent() {
     xhr.addEventListener("load", () => {
       populateForm();
       alert(xhr.responseText);
+      props.redux.fetchCampuses();
+      props.redux.fetchStudents();
     });
   };
 
@@ -137,6 +140,7 @@ export default function SpecificStudent() {
       const text = document.createElement("div");
       text.innerHTML = "Student deleted";
       form.appendChild(text);
+      props.redux.fetchStudents();
     });
   };
 
