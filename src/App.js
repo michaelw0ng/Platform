@@ -47,14 +47,14 @@ class App extends Component {
         <Switch>
           <Route
             exact
-            path="/student/:student"
+            path="/students/:student"
             element={<SpecificStudent redux={this.props} />}
           />
         </Switch>
         <Switch>
           <Route
             exact
-            path="/campus/:campus"
+            path="/campuses/:campus"
             element={<SpecificCampus redux={this.props} />}
           />
         </Switch>

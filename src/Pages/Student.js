@@ -50,7 +50,7 @@ export default function Student(props) {
       const td2 = document.createElement("td");
       td2.innerHTML = obj[i].lastName;
       td1.addEventListener("click", () => {
-        history(`/student/${obj[i].id}`);
+        history(`/students/${obj[i].id}`);
       });
       td1.addEventListener("mouseover", () => {
         td1.style.cursor = "pointer";
@@ -59,7 +59,7 @@ export default function Student(props) {
         td1.style.cursor = "auto";
       });
       td2.addEventListener("click", () => {
-        history(`/student/${obj[i].id}`);
+        history(`/students/${obj[i].id}`);
       });
       td2.addEventListener("mouseover", () => {
         td2.style.cursor = "pointer";
