@@ -15,14 +15,14 @@ export default function Navbar() {
       <div className="separation">
         <div className="bodyNavigation">
           <div id="student">
-            <Link to="/student" className="links">
+            <Link to="/students" className="links">
               Student
             </Link>
           </div>
         </div>
         <div className="bodyNavigation">
           <div id="campus">
-            <Link to="/campus" className="links">
+            <Link to="/campuses" className="links">
               Campus
             </Link>
           </div>
