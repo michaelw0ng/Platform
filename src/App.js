@@ -31,12 +31,16 @@ class App extends Component {
           <Route exact path="/" element={<Homepage />} />
         </Switch>
         <Switch>
-          <Route exact path="/campus" element={<Campus redux={this.props} />} />
+          <Route
+            exact
+            path="/campuses"
+            element={<Campus redux={this.props} />}
+          />
         </Switch>
         <Switch>
           <Route
             exact
-            path="/student"
+            path="/students"
             element={<Student redux={this.props} />}
           />
         </Switch>
@@ -62,22 +66,26 @@ class App extends Component {
 function fetchStudents() {
   return (dispatch) => {
     dispatch({ type: "START_ADDING_STUDENTS_REQUEST" });
-    fetch("http://localhost:8080/students")
-      .then((response) => response.json())
-      .then((students) => {
-        dispatch({ type: "ADD_STUDENTS", students });
-      });
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8080/students");
+    xhttp.send();
+    xhttp.addEventListener("load", () => {
+      const students = JSON.parse(xhttp.responseText);
+      dispatch({ type: "ADD_STUDENTS", students });
+    });
   };
 }
 
 function fetchCampuses() {
   return (dispatch) => {
     dispatch({ type: "START_ADDING_CAMPUSES_REQUEST" });
-    fetch("http://localhost:8080/campuses")
-      .then((response) => response.json())
-      .then((campuses) => {
-        dispatch({ type: "ADD_CAMPUSES", campuses });
-      });
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:8080/campuses");
+    xhttp.send();
+    xhttp.addEventListener("load", () => {
+      const campuses = JSON.parse(xhttp.responseText);
+      dispatch({ type: "ADD_CAMPUSES", campuses });
+    });
   };
 }
 
